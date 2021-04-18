@@ -2,11 +2,23 @@
 
 At the end of the [React.js tutorial](https://reactjs.org/tutorial/tutorial.html#wrapping-up) there are six challenges, which I've completed to get up-to-speed on React.
 
-> If you have extra time or want to practice your new React skills, here are some ideas for improvements that you could make to the tic-tac-toe game which are listed in order of increasing difficulty:
+> If you have extra time or want to practice your new React skills, here are
+> some ideas for improvements that you could make to the tic-tac-toe game 
+> which are listed in order of increasing difficulty:
+> 
+> 1. Display the location for each move in the format (col, row) in the move
+>    history list.
+> 2. Bold the currently selected item in the move list.
+> 3. Rewrite Board to use two loops to make the squares instead of hardcoding
+>    them.
+> 4. Add a toggle button that lets you sort the moves in either ascending or
+>    descending order.
+> 5. When someone wins, highlight the three squares that caused the win.
+> 6. When no one wins, display a message about the result being a draw.
 
 I've described my solution to each, and they're also marked in my code, where possible.
 
-> 1. Display the location for each move in the format (col, row) in the move history list.
+### 1. Display the location for each move in the format (col, row) in the move history list.
 
 In `Game.state.history` I added an array which records the indices of 
 which squares were selected at each turn. This is then used in `Game.render()` 
@@ -14,7 +26,7 @@ to determine the column and row of each square when we construct the move histor
 list.
 
 ```JSX
-// in Game.render()
+// ...in Game.render()
 
 /* Contructs the list of moves history. 
  * History contains two arrays: 
@@ -30,18 +42,18 @@ const moves = history.map((squaresAndKeys, step) => {
   const desc = step ?
     `Go to move #${step} (${location})`:
     'Go to game start';
-// ...
+
+// ...Game.render() continues
 ```
 
-> 2. Bold the currently selected item in the move list.
+### 2. Bold the currently selected item in the move list.
 
 In the `Game.render()` method, when the `moves` list is constructed, I 
 added a ternary operator which checks if the move was at current step,
 and if so sets its font weight to bold.
 
 ```JSX
-// in Game.render()
-// ...
+// ...in Game.render()
 
 /* Changes font weight so the current move is bold. */
 const fontWeight = (step === this.state.stepNumber) ? 
@@ -58,10 +70,11 @@ return (
     </button>
   </li>
 );
-// ...
+
+// ...Game.render() continues
 ```
 
-> 3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
+### 3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
 
 This was the only tricky one. I couldn't figure out how to generate JSX in 
 nested loops, and wasn't familiar with how React keys worked, so I had to 
@@ -91,15 +104,15 @@ class Board extends React.Component {
 }
 ```
 
-> 4. Add a toggle button that lets you sort the moves in either ascending or descending order.
+### 4. Add a toggle button that lets you sort the moves in either ascending or descending order.
 
 I added a `movesAreReversed` property to `Game`'s `state`, and a button
 which flips this between `true` and `false`. I added a conditional in 
 `Game.render()` which reverses the order of `moves`, if true.
 
 ```JSX
-// in Game.render()
-// ...
+// ...in Game.render()
+
 /* Button flips between whether or not moves are displayed in reverse. */
 let reverseMovesButton = <button
   onClick = {() => this.setState({
@@ -107,10 +120,11 @@ let reverseMovesButton = <button
   })}>
     Reverse Moves
   </button>
-//...
+
+// ...
 ```
 
-> 5. When someone wins, highlight the three squares that caused the win.
+### 5. When someone wins, highlight the three squares that caused the win.
 
 I return the winning squares from `calculateWinner`, and these are passed 
 on to `Board`, which uses them to determine whether to color each square
@@ -134,12 +148,11 @@ class Board extends React.Component {
     );
   }
 
-  //... other Board methods
-
+  // ...other Board methods
 }
 ```
 
-> 6. When no one wins, display a message about the result being a draw.
+### 6. When no one wins, display a message about the result being a draw.
 
 In the `calculateWinner` function, if there's no winner, it checks whether
 there are empty squares left. If there are no more empty squares, it's 
@@ -148,6 +161,7 @@ a draw.
 ```JSX
 function calculateWinner(squares) {
   // ...code to check for winner, given by React tutorial.
+
   // The code only reaches this point if there wasn't a winner.
   if (anyEmptySquares(squares)) {
   // There are empty squares to move in. Game is still in-progress
